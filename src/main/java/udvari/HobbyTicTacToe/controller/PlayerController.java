@@ -30,7 +30,6 @@ public class PlayerController {
 
     @PostMapping
     public ResponseEntity<?> registerPlayer(@RequestBody PlayerDetails playerDetails) {
-
         if (playerService.registerPlayer(playerDetails)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
