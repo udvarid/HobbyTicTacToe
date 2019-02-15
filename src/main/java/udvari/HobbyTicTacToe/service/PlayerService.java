@@ -26,10 +26,14 @@ public class PlayerService {
         List<Player> players = playerRepository.findAll();
         List<PlayerDetails> result = new ArrayList<>();
         for (Player player : players) {
-            result.add(new PlayerDetails(player.getName()));
+            PlayerDetails playerDetails = new PlayerDetails();
+            playerDetails.setName(player.getName());
+            result.add(playerDetails);
         }
         return result;
     }
+
+
 
     public boolean registerPlayer(PlayerDetails playerDetails) {
 
@@ -44,4 +48,18 @@ public class PlayerService {
 
     }
 
+    public boolean deletePlayer(String name) {
+
+        Player player = playerRepository.findByName(name);
+        if (player != null) {
+            playerRepository.delete(player);
+            return true;
+        }
+
+        return false;
+    }
+
+    public Player findPlayerByName(String name) {
+        return playerRepository.findByName(name);
+    }
 }
