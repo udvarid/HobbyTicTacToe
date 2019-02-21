@@ -26,7 +26,7 @@ public class DatabaseConfig {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/tictactoe?serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/tictactoe?serverTimezone=UTC&autoReconnect=true&useSSL=false");
         dataSource.setUsername("root");
         dataSource.setPassword("test1234");
 
@@ -56,7 +56,7 @@ public class DatabaseConfig {
 
     private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.show_sql", "false");
         properties.put("hibernate.format_sql", "true");
         properties.put("hibernate.hbm2ddl.auto", "update");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");

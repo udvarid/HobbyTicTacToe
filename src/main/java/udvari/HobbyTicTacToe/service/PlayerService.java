@@ -34,17 +34,11 @@ public class PlayerService {
     }
 
 
+    public void registerPlayer(PlayerDetails playerDetails) {
 
-    public boolean registerPlayer(PlayerDetails playerDetails) {
-
-        if (playerRepository.findByName(playerDetails.getName()) == null) {
-            Player player = new Player();
-            player.setName(playerDetails.getName());
-            playerRepository.save(player);
-            return true;
-        }
-        return false;
-
+        Player player = new Player();
+        player.setName(playerDetails.getName());
+        playerRepository.save(player);
 
     }
 

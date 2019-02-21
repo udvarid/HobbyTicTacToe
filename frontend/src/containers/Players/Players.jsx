@@ -3,14 +3,13 @@ import axios from 'axios';
 
 import './Players.css';
 import AddPlayer from "../../components/AddPlayer/AddPlayer";
-import {Link} from "react-router-dom";
 
 
 class Players extends Component {
 
     state = {
         names: []
-    }
+    };
 
     getData = () => {
         axios.get('http://localhost:8080/api/players')
@@ -22,9 +21,9 @@ class Players extends Component {
 
     };
 
-    deleteData = (name) => {
-
-        axios.delete('http://localhost:8080/api/players/' + name)
+    deleteData = () => {
+        localStorage.removeItem('user');
+        axios.delete('http://localhost:8080/api/players')
             .then(response => {
                 console.log(response);
                 this.getData();
@@ -44,22 +43,39 @@ class Players extends Component {
         clearInterval(this.timerId);
     }
 
+    challenge = (name) => {
+      alert("I challenge you " + name);
+    };
+
     render() {
 
-        const names = this.state.names.map(name => {
-            const nameToLink = "javascript:deleteData(" + name.name + ")";
-            console.log(nameToLink);
+        let logger = () => {
             return (
-                <p key={name.name}>
-                    <a key={name.name} href="#" onClick={() => {
-                        this.deleteData(name.name)
-                    }}>{name.name}</a>
-                </p>
+                <AddPlayer/>
             )
+
+        };
+
+        if (localStorage.getItem('user') != null) {
+            logger = () => {
+                return (
+                    <button onClick={this.deleteData} className="reg-page__button">Logout</button>
+                )
+
+            };
+        }
+
+        const names = this.state.names.map(name => {
+            if (name.name !== localStorage.getItem('user')) {
+                return (
+                    <p key={name.name}><a href="#" onClick={() => {this.challenge(name.name)}}>  {name.name}</a></p>
+                )
+            }
+
         });
         return (
             <div className="players__container">
-                <AddPlayer/>
+                {logger()}
                 {names}
             </div>
         );

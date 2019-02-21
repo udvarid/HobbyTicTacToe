@@ -11,6 +11,8 @@ import udvari.HobbyTicTacToe.dto.PlayerDetails;
 import udvari.HobbyTicTacToe.service.PlayerService;
 import udvari.HobbyTicTacToe.validation.PlayerDetailsValidator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,26 +43,33 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registerPlayer(@Valid @RequestBody PlayerDetails playerDetails) {
-        if (playerService.registerPlayer(playerDetails)) {
-            logger.info("New player is registering");
+    public ResponseEntity<?> registerPlayer(@Valid @RequestBody PlayerDetails playerDetails, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("name") == null) {
+            session.setAttribute("name", playerDetails.getName());
+            playerService.registerPlayer(playerDetails);
+            logger.info(playerDetails.getName() + " is registering");
             return new ResponseEntity<>(HttpStatus.CREATED);
-
+        } else {
+            logger.info("New player is registering rejected");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        logger.warn("Security issue: somebody trying to take an already taken name");
-        return new ResponseEntity<>("Player name is already taken", HttpStatus.UNAUTHORIZED);
+
 
     }
 
-    @DeleteMapping("/{name}")
-    public ResponseEntity<?> deletePlayer(@PathVariable String name) {
-        boolean isDeleteSuccessful = playerService.deletePlayer(name);
-
+    @DeleteMapping
+    public ResponseEntity<?> deletePlayer(HttpServletRequest request) {
         ResponseEntity<?> result;
-        if (isDeleteSuccessful) {
+        HttpSession session = request.getSession();
+        if (session != null && session.getAttribute("name") != null
+                && playerService.deletePlayer((String) session.getAttribute("name"))) {
+            String name = (String) session.getAttribute("name");
             logger.info(name + " player is deleted");
             result = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            session.invalidate();
         } else {
+            String name = (String) session.getAttribute("name");
             logger.info(name + " player delete attempt but he/she is not registered");
             result = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
