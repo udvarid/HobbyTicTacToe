@@ -1,8 +1,10 @@
 package udvari.HobbyTicTacToe.domain;
 
-public enum TicTacToeType {
+public enum GameStatus {
 
     RUNNING("Still running"),
+
+    BROKEN("It was broken"),
 
     WIN_ONE("Player One won"),
 
@@ -12,7 +14,7 @@ public enum TicTacToeType {
 
     private String displayName;
 
-    TicTacToeType(String displayName) {
+    GameStatus(String displayName) {
 
         this.displayName = displayName;
     }

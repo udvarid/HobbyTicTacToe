@@ -3,14 +3,14 @@ package udvari.HobbyTicTacToe.domain;
 import javax.persistence.*;
 
 @Entity
-public class TicTacToeMove {
+public class Move {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private TicTacToeGame game;
+    private Game game;
 
     @Enumerated(EnumType.STRING)
     private PlayerType player;
@@ -19,9 +19,9 @@ public class TicTacToeMove {
 
     private Integer moveY;
 
-    public TicTacToeMove() {}
+    public Move() {}
 
-    public TicTacToeMove(TicTacToeGame game, PlayerType player, Integer moveX, Integer moveY) {
+    public Move(Game game, PlayerType player, Integer moveX, Integer moveY) {
         this.game = game;
         this.player = player;
         this.moveX = moveX;
@@ -36,11 +36,11 @@ public class TicTacToeMove {
         this.id = id;
     }
 
-    public TicTacToeGame getGame() {
+    public Game getGame() {
         return game;
     }
 
-    public void setGame(TicTacToeGame game) {
+    public void setGame(Game game) {
         this.game = game;
     }
 

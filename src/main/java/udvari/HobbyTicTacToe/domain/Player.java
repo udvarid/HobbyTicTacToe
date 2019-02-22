@@ -12,6 +12,9 @@ public class Player {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private PlayerStatus type;
+
     public Player() {}
 
     public Long getId() {
@@ -28,5 +31,13 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public PlayerStatus getType() {
+        return type;
+    }
+
+    public void setType(PlayerStatus type) {
+        this.type = type;
     }
 }

@@ -8,13 +8,13 @@ import AddPlayer from "../../components/AddPlayer/AddPlayer";
 class Players extends Component {
 
     state = {
-        names: []
+        users: []
     };
 
     getData = () => {
         axios.get('http://localhost:8080/api/players')
             .then(response => {
-                this.setState({names: response.data});
+                this.setState({users: response.data});
             })
             .catch(error => console.warn(error));
 
@@ -43,8 +43,20 @@ class Players extends Component {
         clearInterval(this.timerId);
     }
 
+
+
     challenge = (name) => {
-      alert("I challenge you " + name);
+
+        const data = {
+            challenged: name,
+            gameType : 'TicTacToe'
+        };
+
+        axios.post('http://localhost:8080/api/players/challenge', data)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => console.log(error));
     };
 
     render() {
@@ -65,11 +77,20 @@ class Players extends Component {
             };
         }
 
-        const names = this.state.names.map(name => {
-            if (name.name !== localStorage.getItem('user')) {
-                return (
-                    <p key={name.name}><a href="#" onClick={() => {this.challenge(name.name)}}>  {name.name}</a></p>
-                )
+        const names = this.state.users.map(user => {
+            if (user.name !== localStorage.getItem('user')) {
+                if (user.playerStatus === "Free and active player") {
+                    return (
+                        <p key={user.name}><a href="#" onClick={() => {
+                            this.challenge(user.name)
+                        }}>  {user.name + ' - ' + user.playerStatus}</a></p>
+                    )
+                } else {
+                    return (
+                        <p key={user.name}>  {user.name + ' - ' + user.playerStatus}</p>
+                    )
+                }
+
             }
 
         });

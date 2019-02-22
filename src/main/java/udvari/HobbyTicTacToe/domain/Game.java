@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class TicTacToeGame {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany
-    private List<TicTacToeMove> moves = new ArrayList<>();
+    private List<Move> moves = new ArrayList<>();
 
     private String playerOne;
 
@@ -24,27 +24,30 @@ public class TicTacToeGame {
     private boolean running;
 
     @Enumerated(EnumType.STRING)
-    private TicTacToeType type;
+    private GameType gameType;
 
-    public TicTacToeGame() {}
+    @Enumerated(EnumType.STRING)
+    private GameStatus type;
+
+    public Game() {}
 
     public Long getId() {
         return id;
     }
 
-    public TicTacToeGame(String playerOne, String playerTwo) {
+    public Game(String playerOne, String playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.running = true;
-        this.type = TicTacToeType.RUNNING;
+        this.type = GameStatus.RUNNING;
         this.timeStamp = LocalDateTime.now();
     }
 
-    public List<TicTacToeMove> getMoves() {
+    public List<Move> getMoves() {
         return moves;
     }
 
-    public void setMoves(List<TicTacToeMove> moves) {
+    public void setMoves(List<Move> moves) {
         this.moves = moves;
     }
 
@@ -84,11 +87,19 @@ public class TicTacToeGame {
         this.running = running;
     }
 
-    public TicTacToeType getType() {
+    public GameStatus getType() {
         return type;
     }
 
-    public void setType(TicTacToeType type) {
+    public void setType(GameStatus type) {
         this.type = type;
+    }
+
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 }

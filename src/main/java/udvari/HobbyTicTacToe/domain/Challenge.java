@@ -1,6 +1,7 @@
 package udvari.HobbyTicTacToe.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Challenge {
@@ -14,6 +15,11 @@ public class Challenge {
 
     @OneToOne
     private Player challenged;
+
+    private LocalDateTime timeStamp;
+
+    @Enumerated(EnumType.STRING)
+    private GameType gameType;
 
     public Long getId() {
         return id;
@@ -37,5 +43,21 @@ public class Challenge {
 
     public void setChallenged(Player challenged) {
         this.challenged = challenged;
+    }
+
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 }
