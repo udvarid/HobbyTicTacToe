@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import udvari.HobbyTicTacToe.dto.ChallengeDetails;
 import udvari.HobbyTicTacToe.dto.PlayerDetails;
 import udvari.HobbyTicTacToe.service.PlayerService;
 import udvari.HobbyTicTacToe.validation.PlayerDetailsValidator;
@@ -59,23 +58,6 @@ public class PlayerController {
 
     }
 
-    @PostMapping("/challenge")
-    public ResponseEntity<?> challengePlayer(@RequestBody ChallengeDetails challengeDetails, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        logger.info("Challenge is on the way");
-
-        if (session != null && session.getAttribute("name") != null) {
-            String challenger = (String) session.getAttribute("name");
-            String challenged = challengeDetails.getChallenged();
-            logger.info(challenger + " challenges " + challenged);
-            if (playerService.createChallenge(challenger, challenged)) {
-                return new ResponseEntity<>(HttpStatus.CREATED);
-            }
-        }
-        logger.info("New challenge is rejected");
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
 
     @DeleteMapping
     public ResponseEntity<?> deletePlayer(HttpServletRequest request) {

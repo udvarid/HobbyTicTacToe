@@ -2,24 +2,23 @@ package udvari.HobbyTicTacToe.dto;
 
 public class ChallengeDetails {
 
-    private String challenged;
+    private String name;
 
-    private String gameType;
+    private String typeOfGame;
 
-
-    public String getChallenged() {
-        return challenged;
+    public String getName() {
+        return name;
     }
 
-    public void setChallenged(String challenged) {
-        this.challenged = challenged;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getGameType() {
-        return gameType;
+    public String getTypeOfGame() {
+        return typeOfGame;
     }
 
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
+    public void setTypeOfGame(String typeOfGame) {
+        this.typeOfGame = typeOfGame;
     }
 }

@@ -44,15 +44,16 @@ class Players extends Component {
     }
 
 
-
     challenge = (name) => {
 
+
+
         const data = {
-            challenged: name,
-            gameType : 'TicTacToe'
+            name: name,
+            typeOfGame: 'TicTacToe'
         };
 
-        axios.post('http://localhost:8080/api/players/challenge', data)
+        axios.post('http://localhost:8080/api/challenge', data)
             .then(response => {
                 console.log(response)
             })
