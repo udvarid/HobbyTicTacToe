@@ -40,4 +40,9 @@ public class Player {
     public void setType(PlayerStatus type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

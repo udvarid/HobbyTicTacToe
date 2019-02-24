@@ -11,6 +11,10 @@ public class PlayerDetails {
 
     private String playerStatus;
 
+    private String partnerName;
+
+    private String gameTypeName;
+
     public String getName() {
         return name;
     }
@@ -25,5 +29,21 @@ public class PlayerDetails {
 
     public void setPlayerStatus(String playerStatus) {
         this.playerStatus = playerStatus;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
+    public String getGameTypeName() {
+        return gameTypeName;
+    }
+
+    public void setGameTypeName(String gameTypeName) {
+        this.gameTypeName = gameTypeName;
     }
 }

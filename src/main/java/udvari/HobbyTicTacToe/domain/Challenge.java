@@ -60,4 +60,9 @@ public class Challenge {
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }
+
+    @Override
+    public String toString() {
+        return challenger.toString() + " challenged " + challenged.toString() + " for a " + gameType.getDisplayName() + " game";
+    }
 }

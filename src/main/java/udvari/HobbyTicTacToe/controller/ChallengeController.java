@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import udvari.HobbyTicTacToe.dto.ChallengeDetails;
+import udvari.HobbyTicTacToe.service.ChallengeService;
 import udvari.HobbyTicTacToe.service.PlayerService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +20,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/challenge")
 public class ChallengeController {
 
-    private final PlayerService playerService;
+    private final ChallengeService challengeService;
     private static final Logger logger = LoggerFactory.getLogger(PlayerController.class);
 
 
     @Autowired
-    public ChallengeController(PlayerService playerService) {
-        this.playerService = playerService;
+    public ChallengeController(ChallengeService challengeService) {
+        this.challengeService = challengeService;
     }
 
     @PostMapping
@@ -38,7 +39,7 @@ public class ChallengeController {
             String challenger = (String) session.getAttribute("name");
             String challenged = challengeDetails.getName();
             logger.info(challenger + " challenges " + challenged);
-            if (playerService.createChallenge(challenger, challenged)) {
+            if (challengeService.createChallenge(challenger, challenged)) {
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
         }
