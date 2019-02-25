@@ -15,6 +15,8 @@ public class PlayerDetails {
 
     private String gameTypeName;
 
+    private String whoIsNext;
+
     public String getName() {
         return name;
     }
@@ -45,5 +47,13 @@ public class PlayerDetails {
 
     public void setGameTypeName(String gameTypeName) {
         this.gameTypeName = gameTypeName;
+    }
+
+    public String getWhoIsNext() {
+        return whoIsNext;
+    }
+
+    public void setWhoIsNext(String whoIsNext) {
+        this.whoIsNext = whoIsNext;
     }
 }

@@ -19,6 +19,8 @@ public class Game {
 
     private String playerTwo;
 
+    private String whoIsNext;
+
     private LocalDateTime timeStamp;
 
     private boolean running;
@@ -38,6 +40,7 @@ public class Game {
     public Game(String playerOne, String playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+        this.whoIsNext = playerOne;
         this.running = true;
         this.type = GameStatus.RUNNING;
         this.timeStamp = LocalDateTime.now();
@@ -101,5 +104,13 @@ public class Game {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    public String getWhoIsNext() {
+        return whoIsNext;
+    }
+
+    public void setWhoIsNext(String whoIsNext) {
+        this.whoIsNext = whoIsNext;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import udvari.HobbyTicTacToe.controller.PlayerController;
 import udvari.HobbyTicTacToe.domain.*;
 import udvari.HobbyTicTacToe.repository.ChallengeRepository;
+import udvari.HobbyTicTacToe.repository.GameRepository;
 import udvari.HobbyTicTacToe.repository.PlayerRepository;
 
 import java.time.LocalDateTime;
@@ -18,13 +19,15 @@ public class ChallengeService {
 
     private PlayerRepository playerRepository;
     private ChallengeRepository challengeRepository;
+    private GameRepository gameRepository;
     private static final Logger logger = LoggerFactory.getLogger(PlayerController.class);
 
 
     @Autowired
-    public ChallengeService(PlayerRepository playerRepository, ChallengeRepository challengeRepository) {
+    public ChallengeService(PlayerRepository playerRepository, GameRepository gameRepository, ChallengeRepository challengeRepository) {
         this.playerRepository = playerRepository;
         this.challengeRepository = challengeRepository;
+        this.gameRepository = gameRepository;
     }
 
     public boolean createChallenge(String challenger, String challenged) {
@@ -115,6 +118,8 @@ public class ChallengeService {
     public boolean acceptChallenge(String name) {
         Player player = playerRepository.findByName(name);
         Player playerOther = null;
+        GameType gameType = null;
+
 
         Challenge challengeOne = challengeRepository.findChallengeByChallenged(player);
 
@@ -122,16 +127,18 @@ public class ChallengeService {
 
         if (challengeOne != null) {
             playerOther = playerRepository.findByName(challengeOne.getChallenger().getName());
-            player.setType(PlayerStatus.FREE_AND_ACTIVE);
-            playerOther.setType(PlayerStatus.FREE_AND_ACTIVE);
+            player.setType(PlayerStatus.PLAYING);
+            playerOther.setType(PlayerStatus.PLAYING);
+            gameType = challengeOne.getGameType();
             challengeRepository.delete(challengeOne);
-            result = true;
+
+            Game game = new Game(name, playerOther.getName());
+            game.setGameType(gameType);
+            gameRepository.save(game);
+            logger.warn("New game was created!");
+
         }
 
-        //TODO itt később a játékot is létrehozzuk
-        if (result) {
-            Game game = new Game();
-        }
 
         return result;
     }
