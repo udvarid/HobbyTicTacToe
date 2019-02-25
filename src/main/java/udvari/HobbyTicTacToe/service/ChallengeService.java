@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import udvari.HobbyTicTacToe.controller.PlayerController;
-import udvari.HobbyTicTacToe.domain.Challenge;
-import udvari.HobbyTicTacToe.domain.GameType;
-import udvari.HobbyTicTacToe.domain.Player;
-import udvari.HobbyTicTacToe.domain.PlayerStatus;
+import udvari.HobbyTicTacToe.domain.*;
 import udvari.HobbyTicTacToe.repository.ChallengeRepository;
 import udvari.HobbyTicTacToe.repository.PlayerRepository;
 
@@ -110,6 +107,59 @@ public class ChallengeService {
         if (challengeTwo != null) {
             result = challengeTwo.getGameType().getDisplayName();
         }
+
+        return result;
+    }
+
+
+    public boolean acceptChallenge(String name) {
+        Player player = playerRepository.findByName(name);
+        Player playerOther = null;
+
+        Challenge challengeOne = challengeRepository.findChallengeByChallenged(player);
+
+        boolean result = false;
+
+        if (challengeOne != null) {
+            playerOther = playerRepository.findByName(challengeOne.getChallenger().getName());
+            player.setType(PlayerStatus.FREE_AND_ACTIVE);
+            playerOther.setType(PlayerStatus.FREE_AND_ACTIVE);
+            challengeRepository.delete(challengeOne);
+            result = true;
+        }
+
+        //TODO itt később a játékot is létrehozzuk
+        if (result) {
+            Game game = new Game();
+        }
+
+        return result;
+    }
+
+    public boolean cancelChallenge(String name) {
+        Player player = playerRepository.findByName(name);
+
+        Challenge challengeOne = challengeRepository.findChallengeByChallenged(player);
+        Challenge challengeTwo = challengeRepository.findChallengeByChallenger(player);
+
+        boolean result = false;
+
+        if (challengeOne != null) {
+            Player playerOther = playerRepository.findByName(challengeOne.getChallenger().getName());
+            player.setType(PlayerStatus.FREE_AND_ACTIVE);
+            playerOther.setType(PlayerStatus.FREE_AND_ACTIVE);
+            challengeRepository.delete(challengeOne);
+            result = true;
+        }
+
+        if (challengeTwo != null) {
+            Player playerOther = playerRepository.findByName(challengeTwo.getChallenged().getName());
+            player.setType(PlayerStatus.FREE_AND_ACTIVE);
+            playerOther.setType(PlayerStatus.FREE_AND_ACTIVE);
+            challengeRepository.delete(challengeTwo);
+            result = true;
+        }
+
 
         return result;
     }

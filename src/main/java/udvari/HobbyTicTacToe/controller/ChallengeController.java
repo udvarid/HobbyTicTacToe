@@ -5,13 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import udvari.HobbyTicTacToe.dto.ChallengeDetails;
 import udvari.HobbyTicTacToe.service.ChallengeService;
-import udvari.HobbyTicTacToe.service.PlayerService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,5 +41,28 @@ public class ChallengeController {
         }
         logger.info("New challenge is rejected");
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("accept")
+    public ResponseEntity<?> acceptChallenge(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        logger.info("Accepting a challenge");
+
+        if (session != null && session.getAttribute("name") != null &&
+        challengeService.acceptChallenge((String) session.getAttribute("name"))) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("cancel")
+    public ResponseEntity<?> deleteChallenge(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        logger.info("Declining/Cancelling a challenge");
+        if (session != null && session.getAttribute("name") != null &&
+                challengeService.cancelChallenge((String) session.getAttribute("name"))) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

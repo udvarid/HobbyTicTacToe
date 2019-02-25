@@ -47,8 +47,6 @@ class Players extends Component {
 
     challenge = (name) => {
 
-
-
         const data = {
             name: name,
             typeOfGame: 'TicTacToe'
@@ -60,6 +58,8 @@ class Players extends Component {
             })
             .catch(error => console.log(error));
     };
+
+
 
     render() {
 
@@ -77,9 +77,7 @@ class Players extends Component {
                         <button onClick={this.deleteData} className="reg-page__button">Logout</button>
                         <UserStatus data = {this.state.users}/>
                     </Fragment>
-
                 )
-
             };
         }
 
