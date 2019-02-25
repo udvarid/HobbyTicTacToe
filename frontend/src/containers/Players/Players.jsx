@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import axios from 'axios';
 
 import './Players.css';
 import AddPlayer from "../../components/AddPlayer/AddPlayer";
+import UserStatus from "../../components/UserStatus/UserStatus";
 
 
 class Players extends Component {
@@ -72,23 +73,32 @@ class Players extends Component {
         if (localStorage.getItem('user') != null) {
             logger = () => {
                 return (
-                    <button onClick={this.deleteData} className="reg-page__button">Logout</button>
+                    <Fragment>
+                        <button onClick={this.deleteData} className="reg-page__button">Logout</button>
+                        <UserStatus data = {this.state.users}/>
+                    </Fragment>
+
                 )
 
             };
         }
 
+        const readyToPlay = this.state.users.some(user =>  {
+            return user.name === localStorage.getItem('user') && user.playerStatus === "Free and active player";
+            }
+        );
+
         const names = this.state.users.map(user => {
             if (user.name !== localStorage.getItem('user')) {
-                if (user.playerStatus === "Free and active player") {
+                if (user.playerStatus === "Free and active player" && localStorage.getItem('user') != null && readyToPlay) {
                     return (
                         <p key={user.name}><a href="#" onClick={() => {
                             this.challenge(user.name)
-                        }}>  {user.name + ' - ' + user.playerStatus}</a></p>
+                        }}>  {user.name + ' - ' + user.playerStatus + ' ' + user.partnerName}</a></p>
                     )
                 } else {
                     return (
-                        <p key={user.name}>  {user.name + ' - ' + user.playerStatus}</p>
+                        <p key={user.name}>  {user.name + ' - ' + user.playerStatus + ' ' + user.partnerName}</p>
                     )
                 }
 

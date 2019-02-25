@@ -59,19 +59,25 @@ public class ChallengeService {
         Challenge challengeTwo = challengeRepository.findChallengeByChallenger(player);
 
         if (challengeOne != null) {
-            Player otherPlyer = playerRepository.findByName(challengeOne.getChallenger().getName());
-            otherPlyer.setType(PlayerStatus.FREE_AND_ACTIVE);
+            Player otherPlayer = playerRepository.findByName(challengeOne.getChallenger().getName());
+            otherPlayer.setType(PlayerStatus.FREE_AND_ACTIVE);
+
             challengeRepository.delete(challengeOne);
-            logger.info(challengeOne.toString() + " challenge is deleted!");
+            logChallengeDelete(challengeOne);
         }
 
         if (challengeTwo != null) {
-            Player otherPlyer = playerRepository.findByName(challengeTwo.getChallenged().getName());
-            otherPlyer.setType(PlayerStatus.FREE_AND_ACTIVE);
+            Player otherPlayer = playerRepository.findByName(challengeTwo.getChallenged().getName());
+            otherPlayer.setType(PlayerStatus.FREE_AND_ACTIVE);
+
             challengeRepository.delete(challengeTwo);
-            logger.info(challengeTwo.toString() + " challenge is deleted!");
+            logChallengeDelete(challengeTwo);
         }
 
+    }
+
+    private void logChallengeDelete(Challenge challengeOne) {
+        logger.info(challengeOne.toString() + " challenge is deleted!");
     }
 
     public String giveMePartnerName(Player player) {

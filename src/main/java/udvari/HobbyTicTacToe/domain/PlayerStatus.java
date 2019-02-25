@@ -6,11 +6,11 @@ public enum PlayerStatus {
 
     FREE_BUT_SLEEPING("Free but inactive player"),
 
-    INVITOR("Invited somebody"),
+    INVITOR("Invited"),
 
-    INVITED("Invited by somebody"),
+    INVITED("Invited by"),
 
-    PLAYING("Playing in a game");
+    PLAYING("Playing a game with");
 
 
     private String displayName;

@@ -4,6 +4,7 @@ package udvari.HobbyTicTacToe.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import udvari.HobbyTicTacToe.domain.Challenge;
 import udvari.HobbyTicTacToe.domain.Player;
 import udvari.HobbyTicTacToe.domain.PlayerStatus;
 import udvari.HobbyTicTacToe.dto.PlayerDetails;
@@ -66,6 +67,7 @@ public class PlayerService {
     public Player findPlayerByName(String name) {
         return playerRepository.findByName(name);
     }
+
 
 
 }
