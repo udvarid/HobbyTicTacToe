@@ -24,6 +24,22 @@ function UserStatus(props) {
             .catch(error => console.warn(error));
     };
 
+    const makeMove = () => {
+        axios.get('http://localhost:8080/api/game/move')
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => console.warn(error));
+    };
+
+    const giveUpGame = () => {
+        axios.get('http://localhost:8080/api/game/giveUp')
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => console.warn(error));
+    };
+
     const buttonToChallenge = () => {
 
         if (myStatus !== undefined && myStatus.playerStatus === 'Invited by') {
@@ -35,13 +51,28 @@ function UserStatus(props) {
             );
         } else if (myStatus !== undefined && myStatus.playerStatus === 'Invited') {
             return (
-                <button onClick={declineInvitation} className="reg-page__button">Decline</button>
+                <button onClick={declineInvitation} className="reg-page__button">Cancel</button>
+            );
+        } else if (myStatus !== undefined && myStatus.playerStatus === 'Playing a game with' &&
+            myStatus.whoIsNext === localStorage.getItem('user')) {
+            return (
+                <Fragment>
+                    <button onClick={makeMove} className="reg-page__button">Move</button>
+                    <button onClick={giveUpGame} className="reg-page__button">Give Up</button>
+                </Fragment>
+            );
+        } else if (myStatus !== undefined && myStatus.playerStatus === 'Playing a game with') {
+            return (
+                <Fragment>
+                    <button onClick={giveUpGame} className="reg-page__button">Give Up</button>
+                </Fragment>
             );
         } else {
             return (
                 <p></p>
             );
         }
+
 
     };
 

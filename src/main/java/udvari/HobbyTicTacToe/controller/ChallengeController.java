@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
-    private static final Logger logger = LoggerFactory.getLogger(PlayerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
 
 
     @Autowired

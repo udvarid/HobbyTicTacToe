@@ -40,6 +40,7 @@ public class PlayerService {
             if (playerDetails.getPartnerName().isEmpty()) {
                 playerDetails.setPartnerName(gameService.giveMePartnerName(player.getName()));
                 playerDetails.setGameTypeName(gameService.giveMeGameName(player.getName()));
+                playerDetails.setWhoIsNext(gameService.giveMeWhoIsNext(player.getName()));
             }
             result.add(playerDetails);
         }

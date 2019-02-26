@@ -57,6 +57,20 @@ public class GameService {
         return "";
     }
 
+    public String giveMeWhoIsNext(String name) {
+        List<Game> games = gameRepository.findAll();
+
+        for (Game game : games) {
+            if (game.getType() == GameStatus.RUNNING) {
+                if (game.getPlayerOne().equals(name) || game.getPlayerTwo().equals(name)) {
+                    return game.getWhoIsNext();
+                }
+            }
+        }
+
+        return "";
+    }
+
     public void closeGame(String name) {
         List<Game> games = gameRepository.findAll();
 
@@ -76,5 +90,48 @@ public class GameService {
                 }
             }
         }
+    }
+
+
+    public boolean makeMove(String name) {
+
+        List<Game> games = gameRepository.findAll();
+
+        for (Game game : games) {
+            if (game.getType() == GameStatus.RUNNING && game.getWhoIsNext().equals(name)) {
+                String otherPlayer = game.getPlayerOne().equals(name) ? game.getPlayerTwo() : game.getPlayerOne();
+                game.setWhoIsNext(otherPlayer);
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public boolean giveUpGame(String name) {
+        List<Game> games = gameRepository.findAll();
+
+        for (Game game : games) {
+            if (game.getType() == GameStatus.RUNNING && game.getPlayerOne().equals(name)) {
+                game.setType(GameStatus.WIN_TWO);
+                setPlayersToBase(game);
+                return true;
+            }
+            if (game.getType() == GameStatus.RUNNING && game.getPlayerTwo().equals(name)) {
+                game.setType(GameStatus.WIN_ONE);
+                setPlayersToBase(game);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void setPlayersToBase(Game game) {
+        Player playerOne = playerRepository.findByName(game.getPlayerOne());
+        Player playerTwo = playerRepository.findByName(game.getPlayerTwo());
+        playerOne.setType(PlayerStatus.FREE_AND_ACTIVE);
+        playerTwo.setType(PlayerStatus.FREE_AND_ACTIVE);
     }
 }
