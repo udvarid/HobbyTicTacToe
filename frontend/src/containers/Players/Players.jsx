@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import axios from 'axios';
+import SockJsClient from 'react-stomp'
 
 import './Players.css';
 import AddPlayer from "../../components/AddPlayer/AddPlayer";
@@ -11,6 +12,9 @@ class Players extends Component {
     state = {
         users: []
     };
+
+
+
 
     getData = () => {
         axios.get('http://localhost:8080/api/players')
@@ -27,7 +31,6 @@ class Players extends Component {
         axios.delete('http://localhost:8080/api/players')
             .then(response => {
                 console.log(response);
-                this.getData();
             })
             .catch(error => {
                 console.log(error.response);
@@ -35,13 +38,16 @@ class Players extends Component {
 
     };
 
+
+
     componentDidMount() {
         this.getData();
-        this.timerId = setInterval(this.getData, 1000);
+        //this.timerId = setInterval(this.getData, 1000);
+
     };
 
     componentWillUnmount() {
-        clearInterval(this.timerId);
+        //clearInterval(this.timerId);
     }
 
 
@@ -62,6 +68,7 @@ class Players extends Component {
 
 
     render() {
+
 
         let logger = () => {
             return (
@@ -107,6 +114,10 @@ class Players extends Component {
             <div className="players__container">
                 {logger()}
                 {names}
+                <SockJsClient
+                    url='http://localhost:8080/getlist'
+                    topics={['/topic/changeinlist']}
+                    onMessage={(message) => {this.getData()}} />
             </div>
         );
     }

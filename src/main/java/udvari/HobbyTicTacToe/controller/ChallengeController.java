@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import udvari.HobbyTicTacToe.dto.ChallengeDetails;
 import udvari.HobbyTicTacToe.service.ChallengeService;
+import udvari.HobbyTicTacToe.service.SendAutomaticListService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,11 +19,13 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
     private static final Logger logger = LoggerFactory.getLogger(ChallengeController.class);
+    private SendAutomaticListService sendAutomaticListService;
 
 
     @Autowired
-    public ChallengeController(ChallengeService challengeService) {
+    public ChallengeController(ChallengeService challengeService, SendAutomaticListService sendAutomaticListService) {
         this.challengeService = challengeService;
+        this.sendAutomaticListService = sendAutomaticListService;
     }
 
     @PostMapping
@@ -36,6 +39,7 @@ public class ChallengeController {
             String challenged = challengeDetails.getName();
             logger.info(challenger + " challenges " + challenged);
             if (challengeService.createChallenge(challenger, challenged)) {
+                sendAutomaticListService.pushAnHello(challenger + " challenged " + challenged);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
         }
@@ -50,6 +54,7 @@ public class ChallengeController {
 
         if (session != null && session.getAttribute("name") != null &&
         challengeService.acceptChallenge((String) session.getAttribute("name"))) {
+            sendAutomaticListService.pushAnHello("a challenge is accepted, new game is starting");
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -61,6 +66,7 @@ public class ChallengeController {
         logger.info("Declining/Cancelling a challenge");
         if (session != null && session.getAttribute("name") != null &&
                 challengeService.cancelChallenge((String) session.getAttribute("name"))) {
+            sendAutomaticListService.pushAnHello("a challenge is rejected");
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

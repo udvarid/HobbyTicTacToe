@@ -3,9 +3,11 @@ import {BrowserRouter, Route, Link, Redirect} from 'react-router-dom';
 
 import './App.css';
 import Players from "./containers/Players/Players";
+import axios from "axios";
 
 class App extends Component {
 
+    
    
     render() {
         return (

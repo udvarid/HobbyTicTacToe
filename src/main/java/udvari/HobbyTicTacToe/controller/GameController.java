@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import udvari.HobbyTicTacToe.service.ChallengeService;
 import udvari.HobbyTicTacToe.service.GameService;
+import udvari.HobbyTicTacToe.service.SendAutomaticListService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,11 +21,13 @@ public class GameController {
 
     private final GameService gameService;
     private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private SendAutomaticListService sendAutomaticListService;
 
 
     @Autowired
-    public GameController(GameService gameService) {
+    public GameController(GameService gameService, SendAutomaticListService sendAutomaticListService) {
         this.gameService = gameService;
+        this.sendAutomaticListService = sendAutomaticListService;
     }
 
     @GetMapping("move")
@@ -34,6 +37,7 @@ public class GameController {
 
         if (session != null && session.getAttribute("name") != null &&
                 gameService.makeMove((String) session.getAttribute("name"))) {
+            sendAutomaticListService.pushAnHello("a move in a game");
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -46,6 +50,7 @@ public class GameController {
 
         if (session != null && session.getAttribute("name") != null &&
                 gameService.giveUpGame((String) session.getAttribute("name"))) {
+            sendAutomaticListService.pushAnHello("end of a game");
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -137,6 +137,8 @@ public class ChallengeService {
             gameRepository.save(game);
             logger.warn("New game was created!");
 
+            result = true;
+
         }
 
 

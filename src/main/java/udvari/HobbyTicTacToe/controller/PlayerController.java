@@ -9,6 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import udvari.HobbyTicTacToe.dto.PlayerDetails;
 import udvari.HobbyTicTacToe.service.PlayerService;
+import udvari.HobbyTicTacToe.service.SendAutomaticListService;
 import udvari.HobbyTicTacToe.validation.PlayerDetailsValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +24,14 @@ public class PlayerController {
     private final PlayerService playerService;
     private static final Logger logger = LoggerFactory.getLogger(PlayerController.class);
     private PlayerDetailsValidator playerDetailsValidator;
+    private SendAutomaticListService sendAutomaticListService;
 
 
     @Autowired
-    public PlayerController(PlayerService playerService, PlayerDetailsValidator playerDetailsValidator) {
+    public PlayerController(PlayerService playerService, PlayerDetailsValidator playerDetailsValidator, SendAutomaticListService sendAutomaticListService) {
         this.playerService = playerService;
         this.playerDetailsValidator = playerDetailsValidator;
+        this.sendAutomaticListService = sendAutomaticListService;
     }
 
     @InitBinder
@@ -49,6 +52,7 @@ public class PlayerController {
             session.setAttribute("name", playerDetails.getName());
             playerService.registerPlayer(playerDetails);
             logger.info(playerDetails.getName() + " is registering");
+            sendAutomaticListService.pushAnHello(playerDetails.getName() + " is registering");
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             logger.info("New player is registering rejected");
@@ -67,6 +71,7 @@ public class PlayerController {
                 && playerService.deletePlayer((String) session.getAttribute("name"))) {
             String name = (String) session.getAttribute("name");
             logger.info(name + " player is deleted");
+            sendAutomaticListService.pushAnHello(name + " is deleting");
             result = new ResponseEntity<>(HttpStatus.NO_CONTENT);
             session.invalidate();
         } else {
